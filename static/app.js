@@ -1,8 +1,6 @@
 const DATA_URL = '/static/data/event.json';
 let eventData = null;
 let peopleData = [];
-let qrScanner = null;
-let scannerRunning = false;
 
 const safe = (value) => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 
@@ -29,7 +27,9 @@ function personCard(person) {
 
 function renderPeople(group) {
   const filtered = group === 'All' ? peopleData.filter(person => person.group !== 'Researchers') : peopleData.filter(person => person.group === group);
-  document.getElementById('peopleGrid').innerHTML = filtered.map(personCard).join('');
+  document.getElementById('peopleGrid').innerHTML = filtered.length
+    ? filtered.map(personCard).join('')
+    : '<p class="muted">Profiles for this group will be added soon.</p>';
   const researchers = peopleData.filter(person => person.group === 'Researchers');
   document.getElementById('researchGrid').innerHTML = researchers.map(personCard).join('');
 }

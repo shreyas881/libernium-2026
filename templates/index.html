@@ -15,7 +15,7 @@
   <a class="brand" href="#home" aria-label="Libernium home"><span>LIBERNIUM <small>2026 · LIBERATI</small></span></a>
   <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation" aria-expanded="false">☰</button>
   <nav id="nav" aria-label="Main navigation">
-    <a href="#home">Home</a><a href="#research">Researchers</a><a href="#people">Faculty & Team</a><a href="#programme">Programme</a><a href="#venues">Venues</a><a href="#assistant" class="nav-cta">Ask AI</a><a href="#concept">Concept Note</a>
+    <a href="#home">Home</a><a href="#people">Faculty & Team</a><a href="#programme">Programme</a><a href="#venues">Venues</a><a href="#assistant" class="nav-cta">Ask AI</a><a href="#concept">Concept Note</a>
   </nav>
 </header>
 <main>
@@ -23,12 +23,11 @@
   <div class="home-identity-wrap">
     <img class="home-identity-art" src="{{ url_for('static', filename='images/libernium-home-header-clean.jpg') }}" alt="Liberati and CHRIST logos, CHRIST Deemed to be University, Bangalore Bannerghatta Road Campus, Department of Liberal Arts, and LIBERNIUM 2026 logo">
   </div>
-</section>
-
-<section class="page section-pad intro-page" id="research">
-  <div class="section-label">01 / RESEARCH & SCHOLARS</div>
-  <div class="section-heading"><div><p class="eyebrow">RESEARCH COMMUNITY</p><h2>Curiosity that<br><em>moves ideas forward.</em></h2></div><p>Meet the speakers, practitioners and contributors featured in LIBERNIUM 2026.</p></div>
-  <div id="researchGrid" class="people-grid compact-grid"></div>
+  <div class="section-pad intro-page home-research" id="research">
+    <div class="section-label">01 / RESEARCH & SCHOLARS</div>
+    <div class="section-heading"><div><p class="eyebrow">RESEARCH COMMUNITY</p><h2>Curiosity that<br><em>moves ideas forward.</em></h2></div><p>Meet the speakers, practitioners and contributors featured in LIBERNIUM 2026.</p></div>
+    <div id="researchGrid" class="people-grid compact-grid"></div>
+  </div>
 </section>
 
 <section class="page section-pad people-page" id="people">
@@ -59,7 +58,7 @@
 
 
 <section class="page section-pad assistant-page" id="assistant">
-  <div class="section-label">06 / EVENT ASSISTANT</div>
+  <div class="section-label">05 / EVENT ASSISTANT</div>
   <div class="assistant-card"><div><p class="eyebrow">LIBERNIUM EVENT GUIDE</p><h2>Questions?<br><em>Start here.</em></h2><p>Ask about the programme, workshops, speakers, people or campus venues. The assistant uses the event information provided by the organisers.</p><div class="assistant-points"><span>Programme-aware</span><span>Venue guidance</span><span>People directory</span></div></div>
     <div class="chat"><div class="chat-head"><span class="online-dot"></span> Libernium Assistant <small>EVENT GUIDE</small></div><div class="chat-messages" id="chatMessages"><div class="bubble bot">Hello! Welcome to LIBERNIUM 2026. Ask me about the schedule, workshops, speakers or campus directions.</div></div><div class="suggestions"><button>What happens at 1 PM?</button><button>Where are the artisan stalls?</button><button>Who are the panel speakers?</button></div><form id="chatForm"><input id="chatInput" placeholder="Ask about LIBERNIUM…" autocomplete="off" aria-label="Ask the event assistant"><button type="submit" aria-label="Send message">↑</button></form><div class="chat-foot">Answers are grounded in the event data available on this website.</div></div>
   </div>

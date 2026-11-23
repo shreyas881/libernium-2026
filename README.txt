@@ -19,12 +19,20 @@ RUN ON WINDOWS / VS CODE
    python app.py
 4. Open http://127.0.0.1:5000 in Chrome or Edge.
 
+RUN ON macOS / LINUX
+   python3 -m venv .venv
+   source .venv/bin/activate
+   pip install -r requirements.txt
+   PORT=5050 python app.py
+Then open http://127.0.0.1:5050. (macOS's AirPlay Receiver already uses port 5000,
+so pick another port with PORT=..., or turn off AirPlay Receiver in System Settings.)
+
 FEATURES
 - Wide, white Home page with the Liberati logo, CHRIST logo, institutional heading and LIBERNIUM 2026 wordmark; no registration QR or extra poster content.
 - No QR code, registration QR, Register Now button, or QR promotion block is displayed anywhere on the public website.
-- Separate pages/sections for Researchers, Faculty & Team, Programme, Venues, Event Assistant and Concept Note.
+- Home page also shows the Researchers section below the banner. Separate pages/sections for Faculty & Team, Programme, Venues, Event Assistant and Concept Note.
 - Concept Note remains its own independent page and is the final page in the website navigation and page order.
-- Researchers section includes the five event contributors shown in the brochure.
+- The Researchers section on the Home page includes the five event contributors shown in the brochure.
 - People profiles show names and professional roles only; internal photo-source notes and editorial comments are not displayed.
 - Dr. Prerana Srimaal appears first in the faculty order. The rejected circular avatar is not used.
 - Event schedule entries and venue cards include the confirmed floor labels: Mini Auditorium (Second Floor), Idea Nexus (Fourth Floor), Seminar Hall (First Floor), Auditorium Balcony (Second Floor), and Artisan Stalls near the additional entry gate.

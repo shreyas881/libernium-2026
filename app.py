@@ -2,7 +2,7 @@ import json
 import os
 import re
 from pathlib import Path
-from flask import Flask, jsonify, render_template, render_template_string, request, session, redirect, url_for, abort
+from flask import Flask, jsonify, render_template, render_template_string, request, session, redirect, url_for
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -17,30 +17,48 @@ def load_json(filename):
         return json.load(handle)
 
 
+TITLES = {"dr", "mr", "ms", "mrs", "prof"}
+
+
+def has_any(text, terms):
+    """Whole-word/phrase match, so 'gr' doesn't match 'great' and '1:00' doesn't match '11:00'."""
+    return any(re.search(rf"(?<![\w:]){re.escape(term)}(?![\w:])", text) for term in terms)
+
+
+def find_people(q, people):
+    words = set(re.findall(r"[a-z]+", q))
+    found = []
+    for p in people:
+        name_words = {w for w in re.findall(r"[a-z]+", p["name"].lower()) if len(w) > 2 and w not in TITLES}
+        if words & name_words:
+            found.append(p)
+    return found
+
+
 def local_answer(question, event, people):
     q = question.lower()
-    if any(term in q for term in ["1 pm", "1:00", "workshop", "workshops"]):
+    found = find_people(q, people)
+    if found:
+        return "\n".join(f"{p['name']} — {p['role']}" + (f" · {p['phone']}" if p.get('phone') else "") for p in found)
+    if has_any(q, ["1 pm", "1pm", "1:00", "workshop", "workshops"]):
         items = [x for x in event["schedule"] if "Workshop:" in x["title"]]
         return "The workshops run from 1:00 PM to 3:00 PM:\n" + "\n".join(f"• {x['title']} — {x['venue']} (Resource person: {x.get('people','Details not listed')})" for x in items)
-    if any(term in q for term in ["panel", "cool", "speaker", "panellist"]):
+    if has_any(q, ["panel", "cool", "speaker", "speakers", "panellist", "panellists", "panelist", "panelists"]):
         return "The panel discussion ‘The Cost of Being Cool’ is from 10:30 AM to 12:00 PM in the Mini Auditorium on the second floor. Speakers: " + "; ".join(event["panel"]["speakers"])
-    if any(term in q for term in ["stall", "artisan", "weaving", "leatherwork"]):
+    if has_any(q, ["stall", "stalls", "artisan", "artisans", "weaving", "leatherwork"]):
         return "Artisan Stalls & Demonstrations run from 12:00 PM to 2:30 PM outside the campus near the additional entry gate. When entering campus, take the left-side route; the stalls are arranged just before that gate."
-    if any(term in q for term in ["where", "venue", "location", "floor", "direction", "auditorium"]):
+    if has_any(q, ["where", "venue", "location", "floor", "direction", "directions", "venues", "auditorium"]):
         return "Venue guide:\n" + "\n".join(f"• {v['place']}: {v['detail']}" for v in event["venue_notes"])
-    if any(term in q for term in ["date", "when", "time", "day", "schedule", "programme"]):
+    if has_any(q, ["date", "when", "time", "day", "schedule", "programme"]):
         return f"LIBERNIUM 2026 takes place on {event['date']}, from {event['time']}, at {event['venue']}. See the Programme section for the full schedule."
-    if any(term in q for term in ["theme", "about", "libernium", "concept", "objective"]):
+    if has_any(q, ["theme", "about", "libernium", "concept", "objective", "objectives"]):
         return f"The theme is {event['theme']}. The tagline is ‘{event['tagline']}’. {event['about']}"
-    if any(term in q for term in ["registration", "fee", "register", "certificate"]):
+    if has_any(q, ["registration", "fee", "register", "certificate"]):
         reg = event["registration"]
         return f"Registration is open to {reg['openTo']}. The brochure states a workshop registration fee of {reg['fee']}. {reg['certificate']} For details, contact {reg['email']}."
-    if any(term in q for term in ["contact", "email", "phone", "coordinator", "sifat", "jiyaa", "jia", "gr"]):
-        found = [p for p in people if any(word in q for word in p["name"].lower().split())]
-        if found:
-            return "\n".join(f"{p['name']} — {p['role']}" + (f" · {p['phone']}" if p.get('phone') else "") for p in found)
+    if has_any(q, ["contact", "email", "phone", "coordinator", "coordinators"]):
         return f"For event enquiries, contact {event['contact']['email']}. Student coordinators: Jiyaa P. Shah (GR), +91 84310 13872; Sifat Puri, +91 92166 66136."
-    if any(term in q for term in ["faculty", "phd", "scholar", "research", "people", "who"]):
+    if has_any(q, ["faculty", "phd", "scholar", "research", "people", "who", "team"]):
         return "The Faculty & Team section contains the supplied faculty, PhD scholar, event guest and student coordinator profiles. Dr. Embassy Lawbei is listed as Overall Event Coordinator."
     return "I can help with the event date, programme, workshops, panel speakers, artisan stalls, venues, registration information and people. Try asking ‘Where are the artisan stalls?’ or ‘What happens at 1 PM?’"
 
@@ -89,7 +107,7 @@ PRIVATE_SCANNER_HTML = r"""<!doctype html><html lang="en"><head><meta charset="u
 @app.route("/admin/scanner", methods=["GET", "POST"])
 def private_scanner():
     password = os.getenv("ADMIN_PASSWORD", "").strip()
-    if not password:
+    if not password or password.startswith("replace-with"):
         return ("Private scanner is disabled. Set ADMIN_PASSWORD in the .env file, then restart the app.", 503)
     if session.get("private_scanner_authenticated") is True:
         return render_template_string(PRIVATE_SCANNER_HTML)
@@ -109,4 +127,5 @@ def private_scanner_logout():
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=False)
+    # macOS uses port 5000 for AirPlay Receiver, so the port can be changed: PORT=5050 python app.py
+    app.run(host="127.0.0.1", port=int(os.getenv("PORT", "5000")), debug=False)

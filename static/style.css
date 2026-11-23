@@ -16,7 +16,7 @@
 
 /* LIBERNIUM 2026 clean institutional homepage */
 .home-page{display:none;min-height:calc(100vh - 76px);padding:clamp(26px,5vh,58px) 5vw 56px;background:radial-gradient(circle at 12% 8%,#e9dfee 0,transparent 30%),linear-gradient(135deg,#faf8f2 0%,#f2edf4 58%,#edf2e7 100%);align-items:center;justify-content:center;overflow:hidden}
-.home-page:target,.home-page:first-child{display:flex!important}
+.home-page:target,body:not(:has(.page:target)) .home-page{display:flex!important}
 .home-identity-wrap{width:min(100%,1180px);margin:0 auto;background:#fbfaf6;border:1px solid #e4dce6;box-shadow:0 22px 65px #32134416;padding:clamp(12px,2.2vw,26px)}
 .home-identity-art{display:block;width:100%;height:auto;object-fit:contain}
 .home-event-details{display:grid;grid-template-columns:1fr 1fr 1.5fr;gap:14px;padding:22px 10px 8px;border-top:1px solid #ded4e1;margin-top:12px;text-align:center;color:#4b1268}
@@ -28,7 +28,7 @@
 
 /* Final requested homepage and venue layout adjustments */
 .home-page{display:none;min-height:calc(100vh - 76px);padding:0!important;margin:0;background:#fff!important;align-items:flex-start!important;justify-content:flex-start!important;overflow:visible!important}
-.home-page:target,.home-page:first-child{display:flex!important}
+.home-page:target,body:not(:has(.page:target)) .home-page{display:flex!important}
 .home-identity-wrap{width:100%!important;max-width:none!important;margin:0!important;padding:0!important;background:#fff!important;border:0!important;box-shadow:none!important}
 .home-identity-art{display:block;width:100%!important;height:auto!important;max-width:none!important;object-fit:contain;background:#fff}
 .venue-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -37,3 +37,13 @@
 /* Venue page: clean white layout, no repeated full-width callout */
 .venue-page{background:#fff!important;padding-top:56px!important;padding-bottom:56px!important}
 .venue-card{background:#fff;border:1px solid #e7e2e9;border-left:4px solid var(--green);box-shadow:none}
+.home-page{flex-direction:column}.home-research{width:100%}
+/* Responsive refinements */
+/* Tablets and small laptops: use the menu button instead of a squeezed 9px nav */
+@media(max-width:1050px){.topbar{padding:0 5vw}.menu-toggle{display:block;padding:8px;min-width:44px;min-height:44px}.topbar nav{display:none;position:absolute;top:76px;left:0;right:0;background:#fffdf8;padding:12px 6vw 20px;flex-direction:column;align-items:flex-start;gap:2px;border-bottom:1px solid var(--line);box-shadow:var(--shadow);max-height:calc(100vh - 76px);overflow-y:auto}.topbar nav.open{display:flex}.topbar nav a{font-size:14px;padding:11px 0;width:100%}.topbar nav a.nav-cta{width:auto;margin:4px 0}}
+/* Phones: readable small text, comfortable tap targets, no iOS zoom on the chat box */
+@media(max-width:520px){.section-pad{padding:56px 5vw}.people-tabs button,.suggestions button{min-height:40px;font-size:12px}.chat input{font-size:16px}.concept-top{font-size:9px}.section-label,.eyebrow{font-size:10px}}
+@media(max-width:360px){.section-heading h2,.assistant h2{font-size:36px}.concept-title{font-size:46px}.people-grid,.compact-grid{gap:18px 10px}}
+/* Large desktops: show all researchers in one row and keep content from stretching */
+@media(min-width:1200px){.compact-grid{grid-template-columns:repeat(5,minmax(0,1fr));max-width:none}}
+@media(min-width:1500px){.section-pad>*{max-width:1400px;margin-left:auto;margin-right:auto}.home-identity-wrap{max-width:1400px!important;margin:0 auto!important}}
